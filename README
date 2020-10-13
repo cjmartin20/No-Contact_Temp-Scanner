@@ -1,0 +1,27 @@
+-Download MBed Studio (IDE)
+https://os.mbed.com/studio/
+-Download Tera Terminal (Application to write output on terminal from LCP1768)
+https://os.mbed.com/handbook/Windows-serial-configuration
+
+Programs are located in C:\Users\<username>\Mbed\Programs
+
+Instructions to build program
+#config Program_Directory (probably don't have to do)
+> mbed new .
+> mbed add mbed-os
+#specify target device
+> mbed target LPC1768
+#specify toolchain
+> mdbed toolchain ARM
+#compile program
+> mbed compile
+#copy build image to device if named drive (D:)
+> copy .\BUILD\LPC1768\ARM\<program name>.bin D:
+
+
+./Bluetooth holds the source code to manage the wireless connection
+
+./Temp_Sensor holds the source code to recieve analog data from the
+temperature sensor and translate it to digital
+
+./Encrypt holds the source code to secure the data transferred wirelessly
