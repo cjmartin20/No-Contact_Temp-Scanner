@@ -5,8 +5,8 @@ https://os.mbed.com/handbook/Windows-serial-configuration
 
 Programs are located in C:\Users\<username>\Mbed\Programs
 
-Instructions to build program
-#config Program_Directory (probably don't have to do)
+#Instructions to build program
+#config Program_Directory - likely unnecessary
 > mbed new .
 > mbed add mbed-os
 #specify target device
