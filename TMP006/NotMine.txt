@@ -1,0 +1,3 @@
+This code does not belong to us, it was created by Sam Kirsch and
+was used as a reference to perform similar operations.
+It is available at https://os.mbed.com/users/sammacjunkie/code/TMP006_lib//file/48c0564d877a/TMP006.h/
