@@ -2,6 +2,28 @@
 #include <stdio.h>
 #include "TMP006.h"
 
+
+/* Program Example 11.1: Bluetooth serial test data program
+Data is transferred from mbed to PC via Bluetooth. */
+#include "mbed.h"
+Serial rn41(p9,p10); //name the serial port rn41
+BusOut led(LED4,LED3,LED2,LED1);
+int main() {
+rn41.baud(115200); // set baud for RN41
+	while (1) {
+		for (char x=0x30;x<=0x39;x++){ // ASCII numerical characters 0-9
+		rn41.putc(x); // send test char data on serial to RN41
+		led = x & 0x0F; // set LEDs to count in binary
+		wait(0.5);
+		}
+	}
+}
+
+
+
+
+
+/*
 #define Address 0x80
 using namespace std;
 
@@ -22,6 +44,8 @@ int main()
 		ThisThread::sleep_for( 50ms );
     }
 }
+*/
+
 /*
 char float_to_string( float f ) {
     char buff[10];
