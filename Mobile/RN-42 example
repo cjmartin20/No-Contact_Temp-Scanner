@@ -1,0 +1,37 @@
+#include "mbed.h"
+
+Serial rn42(p13,p14);
+Serial pc(USBTX,USBRX);
+DigitalOut myled(LED1);
+
+int main() {
+
+    rn42.baud(115200);
+    pc.baud(115200);
+
+    // echo back characters, toggle the LED
+    while (1) {
+        if (rn42.readable()) {
+            int key = rn42.getc();
+            if(key < 0x20){
+                rn42.printf("\n\r");
+                pc.printf("\n\r");
+            }else{
+                rn42.putc(key);
+                pc.putc(key);
+                myled = !myled;
+            }
+        }
+        if (pc.readable()) {
+            int key = pc.getc();
+            if(key == 0x0D){
+                rn42.printf("\n\r");
+                pc.printf("\n\r");
+            }else{
+                pc.putc(key);
+                rn42.putc(key);
+                myled = !myled;
+            }
+        }
+    }
+}
