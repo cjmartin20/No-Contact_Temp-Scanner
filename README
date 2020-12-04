@@ -1,7 +1,7 @@
 -Download MBed Studio (IDE)
 https://os.mbed.com/studio/
 -Download Tera Terminal (Application to write output on terminal from LCP1768)
-https://os.mbed.com/handbook/Windows-serial-configuration
+https://os.mbed.com/handbook/Windows-scerial-configuration
 
 Programs are located in C:\Users\<username>\Mbed\Programs
 
@@ -19,9 +19,36 @@ Programs are located in C:\Users\<username>\Mbed\Programs
 > copy .\BUILD\LPC1768\ARM\<program name>.bin D:
 
 
+
+---------------------
+Organization
+---------------------
 ./Bluetooth holds the source code to manage the wireless connection
 
 ./Temp_Sensor holds the source code to recieve analog data from the
 temperature sensor and translate it to digital
 
 ./Encrypt holds the source code to secure the data transferred wirelessly
+
+./Desktop holds the server program to receive temperature from sensor and display it to screen
+install blueman bluetooth tool for linux - this is to pair devices without using pin
+
+----------------------------
+Useful Links for coding help
+----------------------------
+UnbufferedSerial Class for Bluetooth
+https://os.mbed.com/docs/mbed-os/v6.4/apis/unbufferedserial.html
+Serial in Linux C
+https://blog.mbedded.ninja/programming/operating-systems/linux/linux-serial-ports-using-c-cpp/#full-example
+Serial I/O CPP
+https://wangbaiyuan.cn/en/c-serial-communication-write-reading-2.html
+Linux Bluetooth
+http://www.penguintutor.com/blog/viewpost.php?id=wp6392
+Serial communication
+https://www.cmrr.umn.edu/~strupp/serial.html
+Bluetooth Essentials
+http://read.pudn.com/downloads166/ebook/757380/bluetooth_essentials_for_programmers.4272206415.pdf
+Qt Tutorial
+https://www.youtube.com/watch?v=txGRU7OrTZo
+Static Compile for Qt
+https://www.youtube.com/watch?v=chMNUzpN4pw
