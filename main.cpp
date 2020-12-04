@@ -1,59 +1,49 @@
 #include "no_contact_temp.h"
-#include <stdio.h>
 #include "TMP006.h"
 
+#include <stdio.h>
+#include <cstdio>
+#include <string.h>
+#include <math.h>
 
-/* Program Example 11.1: Bluetooth serial test data program
-Data is transferred from mbed to PC via Bluetooth. */
-#include "mbed.h"
-Serial rn41(p9,p10); //name the serial port rn41
-BusOut led(LED4,LED3,LED2,LED1);
-int main() {
-rn41.baud(115200); // set baud for RN41
-	while (1) {
-		for (char x=0x30;x<=0x39;x++){ // ASCII numerical characters 0-9
-		rn41.putc(x); // send test char data on serial to RN41
-		led = x & 0x0F; // set LEDs to count in binary
-		wait(0.5);
-		}
-	}
-}
-
-
-
-
-
-/*
-#define Address 0x80
 using namespace std;
 
-//TMP006 sensor(p9, p10, Address); 
+//for TMP006
+#define Address             0x80
+#define TMP006_TX_PIN       p9
+#define TMP006_RX_PIN       p10
 
-char float_to_string( float f );
+//BufferedSerial
+#define RN41_TX_PIN         p28
+#define RN41_RX_PIN         p27
+#define MAXIMUM_BUFFER_SIZE 32
 
-// main() runs in its own thread in the OS
-int main()
+DigitalOut led1(LED1);
+DigitalOut led2(LED2);
+DigitalOut led3(LED3);
+DigitalOut led4(LED4);
+
+TMP006 sensor(TMP006_TX_PIN, TMP006_RX_PIN, Address);
+
+static BufferedSerial rn41(RN41_TX_PIN, RN41_RX_PIN, 115200);
+static BufferedSerial pc(USBTX, USBRX, 9600); 
+/*default is 9600 baud, 8 bit data data fram, no parity, one stop bit(1)*/
+
+int main(void)
 {
 
-    while (true) {
-        //float thistemp = sensor.readObjTempC(Address);
-        float thistemp = temp_Celcius();
-        int i = int(thistemp);
-        int d = int((thistemp - float(i)) * 10000.0);
-        printf( "Temperature %i.%i\n", i, d);
-		ThisThread::sleep_for( 50ms );
+    // Application buffer to receive the data
+    char buf[MAXIMUM_BUFFER_SIZE];
+    char format[] = {"%i.%i"};
+    while (1) {
+        memset(&buf, '\0', sizeof(buf));
+	    float thistemp = sensor.readObjTempC(Address);
+	    int i = int(thistemp);
+	    int d = abs(int((thistemp - float(i)) * 10000.0));
+        sprintf(&buf[0], format, i, d);
+        printf( "%s", buf);
+        pc.write(buf, sizeof(buf));
+        //printf("Test Part 2\n");
+        ThisThread::sleep_for( 150ms );
     }
 }
-*/
-
-/*
-char float_to_string( float f ) {
-    char buff[10];
-    int i = int(f);
-    float d = f - float(i)
-    d = d * 1000.0;
-    char format = {"%i.%i"};
-    sprintf(&buff[0], format, i, d);
-    return buff;   
-}
-*/
