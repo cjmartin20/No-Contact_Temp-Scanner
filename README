@@ -32,6 +32,21 @@ temperature sensor and translate it to digital
 
 ./Desktop holds the server program to receive temperature from sensor and display it to screen
 install blueman bluetooth tool for linux - this is to pair devices without using pin
+Fedora server
+un : groot
+pw : 1234
+https://wiki.qt.io/Building_Qt_5_from_Git
+configuration for Qt
+../qt5/configure -developer-build -opensource -nomake examples -nomake tests -static -prefix /home/groot/Documents/qt5-build
+getting runtime error that said it couldn't find fonts
+
+Adding system fonts to Qt library with symbolic links
+ln -snf /usr/share/fonts/dejavu-serif-fonts/ /home/groot/Documents/qt5-build/qtbase/lib/dejavu-serif
+ln -snf /usr/share/fonts/dejavu-sans-mono-fonts/ /home/groot/Documents/qt5-build/qtbase/lib/dejavu-sans-mono
+ln -snf /usr/share/fonts/ /home/groot/Documents/qt5-build/qtbase/lib/dejavu-sans
+
+Serial Communicaton Notes
+Make sure to run program as root
 
 ----------------------------
 Useful Links for coding help
