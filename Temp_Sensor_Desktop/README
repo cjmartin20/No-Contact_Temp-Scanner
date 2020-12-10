@@ -1,0 +1,19 @@
+./Desktop holds the server program to receive temperature from a serial communication.
+The LPC1768 reads from a sensor and the GUI displays it.
+
+install blueman bluetooth tool for linux - this is to pair devices without using pin
+
+Fedora 33 Workstation
+un : groot
+pw : 1234
+https://wiki.qt.io/Building_Qt_5_from_Git
+configuration for Qt
+../qt5/configure -developer-build -opensource -nomake examples -nomake tests -static -prefix /home/groot/Documents/qt5-build
+Adding system fonts to Qt library with symbolic links
+ln -snf /usr/share/fonts/dejavu-serif-fonts/ /home/groot/Documents/qt5-build/qtbase/lib/dejavu-serif
+ln -snf /usr/share/fonts/dejavu-sans-mono-fonts/ /home/groot/Documents/qt5-build/qtbase/lib/dejavu-sans-mono
+ln -snf /usr/share/fonts/ /home/groot/Documents/qt5-build/qtbase/lib/dejavu-sans
+
+Serial Communicaton Notes
+The port is hard coded as /dev/ttyACM0 for Federa 33. This is at the top of the temperature.cpp file.
+Make sure to run program as root or give user permissions to use the serial port. 
