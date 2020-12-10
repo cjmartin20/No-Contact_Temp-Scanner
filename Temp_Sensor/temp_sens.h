@@ -1,5 +1,5 @@
 #include "mbed.h"
 
-float temp_Celcius();
+int temp_Celcius();
 float temp_Fareinheit();
 float temp_Kelvin();
