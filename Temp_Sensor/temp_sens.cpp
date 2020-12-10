@@ -12,7 +12,7 @@ const int addr = 0x80;
 //LSB represents 1/32 Celcius
 char buff[2]; 
 
-int temp_Celcius() {
+double temp_Celcius() {
   char reg[1];
   char data[2];
   
@@ -25,7 +25,6 @@ int temp_Celcius() {
  
   raw >>= 2;
 
-
         buff[0] = 0x01;
         buff[1] = 0x00;
         i2c.write(addr, buff, 2);
@@ -36,46 +35,11 @@ int temp_Celcius() {
 	
 	//shifts top byte left by 8, then inclusive or with bottom
     //then it is forced into a float and divided by 32 (LSB is 1/32 Celcius)
-	return int(( ( buff[0] << 8 ) | buff[1] ) / 32.0);
+	return (( ( buff[0] << 8 ) | buff[1] ) / 32.0);
 }
-float temp_Fareinheit() {
-    return 6.9;
+double temp_Fareinheit() {
+    return (9.0 / 5.0) * temp_Celcius() + 32.0;
 }
-float temp_Kelvin() {
-    return 6.9;
+double temp_Kelvin() {
+    return temp_Celcius() + 273.15;
 }
-
-
-/*
- * Copyright (c) 2014-2020 Arm Limited and affiliates.
- * SPDX-License-Identifier: Apache-2.0
- */
-/*
-#include "mbed.h"
-
-// Read temperature from LM75BD
-
-I2C i2c(I2C_SDA, I2C_SCL);
-
-const int addr7bit = 0x48;      // 7 bit I2C address
-const int addr8bit = 0x48 << 1; // 8bit I2C address, 0x90
-
-int main()
-{
-    char cmd[2];
-    while (1) {
-        cmd[0] = 0x01;
-        cmd[1] = 0x00;
-        i2c.write(addr8bit, cmd, 2);
-
-        ThisThread::sleep_for(500);
-
-        cmd[0] = 0x00;
-        i2c.write(addr8bit, cmd, 1);
-        i2c.read(addr8bit, cmd, 2);
-
-        float tmp = (float((cmd[0] << 8) | cmd[1]) / 256.0);
-        printf("Temp = %.2f\n", tmp);
-    }
-}
- */

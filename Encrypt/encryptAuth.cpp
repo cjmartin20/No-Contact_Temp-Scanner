@@ -10,6 +10,8 @@
 #include <iostream>
 #include <string.h>
 
+extern double getValue();
+
 const unsigned char EncryptAuth::secretKey[16] = 
 {   0xf4, 0x82, 0xc6, 0x70, 
     0x3c, 0xc7, 0x61, 0x0a,
@@ -18,7 +20,7 @@ const unsigned char EncryptAuth::secretKey[16] =
 };
 
 
-const char EncryptAuth::temperature[] = getValue());
+const char EncryptAuth::temperature[] = getValue();
 //const char EncryptAuth::metadata[] = 0; //person information 
 
 EncryptAuth::EncryptAuth()

@@ -28,6 +28,7 @@ static BufferedSerial pc(USBTX, USBRX, 9600);
 /*default is 9600 baud, 8 bit data data fram, no parity, one stop bit(1)*/
 
 int main(void){
+    /*
     int exitKey = MBEDTLS_EXIT_SUCCESS;
     int R; //used to print the errors
 
@@ -49,6 +50,10 @@ int main(void){
 
     mbedtls_platform_teardown(NULL);
     return exitKey;
+    */
+
+
+
     //buffer to send the temperature as a string
     char buf[MAXIMUM_BUFFER_SIZE];
     //format of string
@@ -76,5 +81,5 @@ int main(void){
     }
 }
 double getValue(){
-    return 
+    return sensor.readObjTempF(Address);
 }
