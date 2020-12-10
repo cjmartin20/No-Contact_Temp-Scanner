@@ -3,10 +3,11 @@
 #include "mbedtls/cipher.h"
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
-#include "temp_sens.h"
+#include "no_contact_temp.h"
 #if DEBUG_LEVEL > 0
 #include "mbedtls/debug.h"
 #endif
+#include <iostream>
 #include <string.h>
 
 const unsigned char EncryptAuth::secretKey[16] = 
@@ -16,7 +17,8 @@ const unsigned char EncryptAuth::secretKey[16] =
     0x87, 0xb8, 0xc1, 0x72,
 };
 
-const char EncryptAuth::temperature[] = temp_Fareinheit();
+
+const char EncryptAuth::temperature[] = getValue());
 //const char EncryptAuth::metadata[] = 0; //person information 
 
 EncryptAuth::EncryptAuth()
