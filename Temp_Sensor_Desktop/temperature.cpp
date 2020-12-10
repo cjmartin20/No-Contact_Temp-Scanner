@@ -1,22 +1,28 @@
-#include "temp_receiver.h"
+#include "temperature.h"
 
 #include <fcntl.h> // Contains file controls like O_RDWR
 #include <errno.h> // Error integer and strerror() function
 #include <termios.h> // Contains POSIX terminal control definitions
 #include <unistd.h> // write(), read(), close()
 #include <thread>
+#include <stdio.h>
 #include <chrono>
+#include <string>
+
+#define READ_BUFFER_LENGTH       30
+#define NUM_BUFFER_LENGTH    12
+
 
 // Open the serial port. Change device path as needed (currently set to an standard FTDI USB-UART cable type device)
 int serial_port;
 int currentTemp = 0;
+char read_buf[READ_BUFFER_LENGTH];
 
-temp_receiver::temp_receiver()
+Temperature::Temperature()
 {
-
 }
-int temp_receiver::openSerialPort(){
-    temp_receiver::serial_port = open("/dev/ttyACM0", O_RDWR);
+double Temperature::getTemp(){
+    serial_port = open("/dev/ttyACM0", O_RDWR);
 
         // Create new termios struc, we call it 'tty' for convention
         struct termios tty;
@@ -45,8 +51,8 @@ int temp_receiver::openSerialPort(){
         // tty.c_oflag &= ~OXTABS; // Prevent conversion of tabs to spaces (NOT PRESENT ON LINUX)
         // tty.c_oflag &= ~ONOEOT; // Prevent removal of C-d chars (0x004) in output (NOT PRESENT ON LINUX)
 
-        tty.c_cc[VTIME] = 10;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
-        tty.c_cc[VMIN] = 12;
+        tty.c_cc[VTIME] = 0;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
+        tty.c_cc[VMIN] = 30;
 
         // Set in/out baud rate to be 9600
         cfsetispeed(&tty, B9600);
@@ -54,35 +60,67 @@ int temp_receiver::openSerialPort(){
 
         // Save tty settings, also checking for error
         if (tcsetattr(serial_port, TCSANOW, &tty) != 0) {
-            //printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
+            printf("Error # from tcsetattr:" );//%s\n", errno, strerror(errno));
             return 1;
         }
-}
-int temp_receiver::getTemp() {
 
-  // Allocate memory for read buffer, set size according to your needs
-  char read_buf [12];
-
-      // Normally you wouldn't do this memset() call, but since we will just receive
+    // Normally you wouldn't do this memset() call, but since we will just receive
       // ASCII data for this example, we'll set everything to 0 so we can
       // call printf() easily.
-      //memset(&read_buf, '\0', sizeof(read_buf));
+      //replacement for memset
+      for(int i = 0; i < READ_BUFFER_LENGTH; i++){
+          read_buf[i] = '_';
+      }
       // Read bytes. The behaviour of read() (e.g. does it block?,
       // how long does it block for?) depends on the configuration
       // settings above, specifically VMIN and VTIME
-      int num_bytes = read(serial_port, &read_buf, sizeof(read_buf));
+      int no_data = true;
+      while(no_data){
+     int num_bytes = read(serial_port, &read_buf, sizeof(read_buf));
 
       // n is the number of bytes read. n may be 0 if no bytes were received, and can also be -1 to signal an error.
       if (num_bytes < 0) {
-          //printf("Error reading: %s", strerror(errno));
-          //bring back later for error handling// return 1;
-          //delete later
-          currentTemp = currentTemp + 1;
-          return currentTemp;
+          printf("Error reading bytes\n");
+          return 0.0;
       }
-      return 3;
-}
-int temp_receiver::stopReceiving(){
-    close(serial_port);
-    return 0;
+      printf("Bytes read : %i\n", num_bytes);
+      printf("read_buf (from data check):\n%s\n", read_buf);
+      //scan buffer and make sure there are numbers;
+      //make sure there are at least two '$' in buffer
+      int knt = 0;
+      for(int i=0; i<READ_BUFFER_LENGTH; i++){
+          if (read_buf[i] == '$') knt++;
+          if (knt > 1) no_data = false;
+      }
+      }
+
+
+
+      char num_buf[NUM_BUFFER_LENGTH];
+      int buf_index = 0;
+      for(int i = 0; i < NUM_BUFFER_LENGTH; i++){
+          num_buf[i] = '\0';
+      }
+      bool start_reading = false;
+      //start at index 5 to avoid a number that was split
+      for(int i = 0; i<READ_BUFFER_LENGTH; i++){
+          if (read_buf[i] == '$'){ // recognize separation char
+              if(start_reading){
+                  printf("Breaking loop at %i...\ncurrent char: %c\nprevious char: %c\n", i,read_buf[i], read_buf[i - 1]);
+                  if (i != READ_BUFFER_LENGTH) printf("next char : %c", read_buf[i + 1]);
+                      break;
+              }
+              else start_reading = true;
+          }
+          else{
+              if(start_reading){
+                      num_buf[buf_index] = read_buf[i];
+                      buf_index++;
+              }
+          }
+      }
+      printf("read_buf:\n%s\n", read_buf);
+      printf("num_buf:\n%s\n", num_buf);
+      close(serial_port);
+      return std::stod(num_buf);//convert string trapped in num_buf to double
 }
