@@ -69,9 +69,6 @@ double Temperature::getTemp(){
     }
     int no_data = true;
     while(no_data){
-        // Read bytes. The behaviour of read() (e.g. does it block?,
-        // how long does it block for?) depends on the configuration
-        // settings above, specifically VMIN and VTIME
         int num_bytes = read(serial_port, &read_buf, sizeof(read_buf));
         // -1 to signals error.
         if (num_bytes < 0) {
@@ -114,5 +111,12 @@ double Temperature::getTemp(){
     printf("read_buf:\n%s\n", read_buf);
     printf("num_buf:\n%s\n", num_buf);
     close(serial_port);
-    return std::stod(num_buf);//convert string trapped in num_buf to double
+    double d;
+    try {
+        d = std::stod(num_buf);//convert string trapped in num_buf to double
+    }
+    catch{
+        d = 0.0;
+    }
+    return d;
 }

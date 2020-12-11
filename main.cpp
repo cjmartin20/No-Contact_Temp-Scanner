@@ -28,6 +28,33 @@ static BufferedSerial pc(USBTX, USBRX, 9600);
 /*default is 9600 baud, 8 bit data data fram, no parity, one stop bit(1)*/
 
 int main(void){
+    //buffer to send the temperature as a string
+    char buf[MAXIMUM_BUFFER_SIZE];
+    //format of string
+    char format[] = {"$%i.%i$\n"};
+    while (1) {
+        int R; //used to print the errors
+        if((R=mbedtls_platform_setup(NULL))!=0)
+        {
+            printf("Platfrom init failed w/ error%ds\n", R);
+        }        
+        //set all data in buffer equal to easy to use character
+        memset(&buf, '\0', sizeof(buf));
+        double current_temp = sensor.readObjTempF(Address);
+	    int i = int(current_temp);
+	    int d = abs(int((current_temp - double(i)) * 10.0));
+        sprintf(&buf[0], format, i, d);
+        pc.write(buf, sizeof(buf));
+        if(current_temp > 70.0) led1 = 1; else led1 = 0;
+        if(current_temp > 80.0) led2 = 1; else led2 = 0;
+        if(current_temp > 90.0) led3 = 1; else led3 = 0;
+        if(current_temp >100.0) led4 = 1; else led4 = 0;
+        ThisThread::sleep_for( 150ms );
+    }
+}
+double getValue(){
+    return sensor.readObjTempF(Address);
+}
     /*
     int exitKey = MBEDTLS_EXIT_SUCCESS;
     int R; //used to print the errors
@@ -51,35 +78,3 @@ int main(void){
     mbedtls_platform_teardown(NULL);
     return exitKey;
     */
-
-
-
-    //buffer to send the temperature as a string
-    char buf[MAXIMUM_BUFFER_SIZE];
-    //format of string
-    char format[] = {"$%i.%i$\n"};
-    while (1) {
-        int R; //used to print the errors
-        if((R=mbedtls_platform_setup(NULL))!=0)
-        {
-            printf("Platfrom init failed w/ error%ds\n", R);
-        }        
-        //set all data in buffer equal to easy to use character
-        /*
-        memset(&buf, '\0', sizeof(buf));
-        double current_temp = sensor.readObjTempF(Address);
-	    int i = int(current_temp);
-	    int d = abs(int((current_temp - double(i)) * 10.0));
-        sprintf(&buf[0], format, i, d);
-        */
-        pc.write(buf, sizeof(buf));
-        if(current_temp > 70.0) led1 = 1; else led1 = 0;
-        if(current_temp > 80.0) led2 = 1; else led2 = 0;
-        if(current_temp > 90.0) led3 = 1; else led3 = 0;
-        if(current_temp >100.0) led4 = 1; else led4 = 0;
-        ThisThread::sleep_for( 150ms );
-    }
-}
-double getValue(){
-    return sensor.readObjTempF(Address);
-}

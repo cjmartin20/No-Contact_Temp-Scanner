@@ -20,7 +20,7 @@ const unsigned char EncryptAuth::secretKey[16] =
 };
 
 
-const char EncryptAuth::temperature[] = getValue();
+const char EncryptAuth::double_to_encrypt[] = getValue();
 //const char EncryptAuth::metadata[] = 0; //person information 
 
 EncryptAuth::EncryptAuth()

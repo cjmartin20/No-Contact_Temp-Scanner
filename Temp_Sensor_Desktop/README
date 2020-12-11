@@ -17,3 +17,9 @@ ln -snf /usr/share/fonts/ /home/groot/Documents/qt5-build/qtbase/lib/dejavu-sans
 Serial Communicaton Notes
 The port is hard coded as /dev/ttyACM0 for Federa 33. This is at the top of the temperature.cpp file.
 Make sure to run program as root or give user permissions to use the serial port. 
+
+************
+Useful links
+************
+Cross Platform with Qt questions
+https://stackoverflow.com/questions/10934683/how-do-i-configure-qt-for-cross-compilation-from-linux-to-windows-target

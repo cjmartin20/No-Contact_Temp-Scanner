@@ -38,7 +38,7 @@ void MainWindow::UpdateTemp()
     Temperature tr;
     //get value as Fahrenheit
     double f = tr.getTemp();
-    //convert to Celsius
+    //convert to Celcius
     double c = (f - 32.0) * 5.0 / 9.0;
     //format output to only one decimal place
     int c_int = int(c * 10.0);
