@@ -14,6 +14,13 @@ ln -snf /usr/share/fonts/dejavu-serif-fonts/ /home/groot/Documents/qt5-build/qtb
 ln -snf /usr/share/fonts/dejavu-sans-mono-fonts/ /home/groot/Documents/qt5-build/qtbase/lib/dejavu-sans-mono
 ln -snf /usr/share/fonts/ /home/groot/Documents/qt5-build/qtbase/lib/dejavu-sans
 
+You may get a warning about about Wayland/Gnome and the full screen doesn't look right-
+$ sudo gedit /etc/gdm/custom.conf 
+Uncomment this line:
+WaylandEnable=falese
+Add this line to the [daemon] section:
+DefaultSession=gnome-xorg.desktop 
+
 Serial Communicaton Notes
 The port is hard coded as /dev/ttyACM0 for Federa 33. This is at the top of the temperature.cpp file.
 Make sure to run program as root or give user permissions to use the serial port. 
